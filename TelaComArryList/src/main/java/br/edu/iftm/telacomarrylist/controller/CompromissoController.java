@@ -1,3 +1,5 @@
-public class compromissoController {
+package br.edu.iftm.telacomarrylist.controller;
+
+public class CompromissoController {
 
 }

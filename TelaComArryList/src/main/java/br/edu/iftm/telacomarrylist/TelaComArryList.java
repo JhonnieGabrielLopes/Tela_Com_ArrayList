@@ -1,16 +1,16 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- */
-
 package br.edu.iftm.telacomarrylist;
 
-/**
- *
- * @author jhonn
- */
-public class TelaComArryList {
+import br.edu.iftm.telacomarrylist.model.Compromisso;
+import br.edu.iftm.telacomarrylist.model.Usuario;
+import br.edu.iftm.telacomarrylist.view.Tela;
+import java.util.ArrayList;
 
+public class TelaComArryList {
+    
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        ArrayList<Compromisso> compromissos = new ArrayList<>();
+        ArrayList<Usuario> usuarios = new ArrayList<>();
+        Tela tela = new Tela(compromissos, usuarios);
+        tela.setVisible(true);
     }
 }
