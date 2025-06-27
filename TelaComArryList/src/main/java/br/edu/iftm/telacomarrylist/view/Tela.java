@@ -1,24 +1,31 @@
 package br.edu.iftm.telacomarrylist.view;
 
+import br.edu.iftm.telacomarrylist.controller.AgendaController;
+import br.edu.iftm.telacomarrylist.model.Agenda;
 import br.edu.iftm.telacomarrylist.model.Compromisso;
 import br.edu.iftm.telacomarrylist.model.Usuario;
 import java.awt.CardLayout;
 import java.awt.Color;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.time.format.DateTimeFormatter;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
 
 
 public class Tela extends javax.swing.JFrame {
     private CardLayout cardLayout;
-    private ArrayList<Compromisso> compromissos;
-    private ArrayList<Usuario> usuarios;
+    private Agenda agenda;
+    private AgendaController agendaController;
+    private List<Compromisso> compromissos;
+    private int indiceCompromisso = 0;
     
-    public Tela(ArrayList<Compromisso> compromissos, ArrayList<Usuario> usuarios) {
+    public Tela(Agenda agenda) {
+        this.agenda = agenda;
+        agendaController = new AgendaController(agenda);
+        compromissos = agendaController.listarCompromissos();
         initComponents();
-        this.compromissos = compromissos;
-        this.usuarios = usuarios;
         cardLayout = (CardLayout) getContentPane().getLayout();
     }
 
@@ -27,6 +34,7 @@ public class Tela extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
         panelLogin = new javax.swing.JPanel();
         panelInternoLogin = new javax.swing.JPanel();
         tituloLogin = new javax.swing.JLabel();
@@ -52,24 +60,25 @@ public class Tela extends javax.swing.JFrame {
         tituloAcao = new javax.swing.JLabel();
         tituloDescricao = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        entradaDescCompromisso = new javax.swing.JTextArea();
         jLabel1 = new javax.swing.JLabel();
-        jFormattedTextField1 = new javax.swing.JFormattedTextField();
-        jFormattedTextField2 = new javax.swing.JFormattedTextField();
+        entradaDataFim = new javax.swing.JFormattedTextField();
+        entradaDataInicio = new javax.swing.JFormattedTextField();
         jLabel3 = new javax.swing.JLabel();
-        jFormattedTextField3 = new javax.swing.JFormattedTextField();
+        entradaHoraInicio = new javax.swing.JFormattedTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
+        entradaNomeCompromisso = new javax.swing.JTextField();
+        btCadastrar = new javax.swing.JButton();
+        btListar = new javax.swing.JButton();
+        btAlterar = new javax.swing.JButton();
+        btRemover = new javax.swing.JButton();
+        btAnterior = new javax.swing.JButton();
+        btProximo = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
-        jFormattedTextField4 = new javax.swing.JFormattedTextField();
+        entradaHoraFim = new javax.swing.JFormattedTextField();
+        btSalvar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new java.awt.CardLayout());
@@ -89,6 +98,11 @@ public class Tela extends javax.swing.JFrame {
         entradaUsuario.setBackground(new java.awt.Color(41, 41, 41));
         entradaUsuario.setForeground(new java.awt.Color(255, 255, 255));
         entradaUsuario.setCaretColor(new java.awt.Color(255, 255, 255));
+        entradaUsuario.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                entradaUsuarioKeyReleased(evt);
+            }
+        });
 
         tituloSenha.setForeground(new java.awt.Color(255, 255, 255));
         tituloSenha.setText("Senha");
@@ -96,6 +110,11 @@ public class Tela extends javax.swing.JFrame {
         pfSenhaLogin.setBackground(new java.awt.Color(41, 41, 41));
         pfSenhaLogin.setForeground(new java.awt.Color(255, 255, 255));
         pfSenhaLogin.setCaretColor(new java.awt.Color(255, 255, 255));
+        pfSenhaLogin.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                pfSenhaLoginKeyReleased(evt);
+            }
+        });
 
         btEntrarLogin.setBackground(new java.awt.Color(87, 87, 87));
         btEntrarLogin.setForeground(new java.awt.Color(255, 255, 255));
@@ -133,7 +152,7 @@ public class Tela extends javax.swing.JFrame {
                         .addGap(56, 56, 56)
                         .addGroup(panelInternoLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(panelInternoLoginLayout.createSequentialGroup()
-                                .addComponent(tituloUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(tituloUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE)
                                 .addGap(228, 228, 228))
                             .addComponent(entradaUsuario)
                             .addGroup(panelInternoLoginLayout.createSequentialGroup()
@@ -322,39 +341,153 @@ public class Tela extends javax.swing.JFrame {
         tituloDescricao.setForeground(new java.awt.Color(255, 255, 255));
         tituloDescricao.setText("Descrição do Compromisso:");
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        entradaDescCompromisso.setBackground(new java.awt.Color(90, 90, 90));
+        entradaDescCompromisso.setColumns(20);
+        entradaDescCompromisso.setForeground(new java.awt.Color(255, 255, 255));
+        entradaDescCompromisso.setRows(5);
+        jScrollPane1.setViewportView(entradaDescCompromisso);
 
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Data do Compromisso");
 
-        jLabel3.setText("Horário");
+        entradaDataFim.setBackground(new java.awt.Color(90, 90, 90));
+        entradaDataFim.setForeground(new java.awt.Color(255, 255, 255));
+        try {
+            entradaDataFim.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
 
-        jLabel2.setText("Início");
-
-        jLabel4.setText("Término");
-
-        jLabel5.setText("Nome do Compromisso");
-
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+        entradaDataInicio.setBackground(new java.awt.Color(90, 90, 90));
+        entradaDataInicio.setForeground(new java.awt.Color(255, 255, 255));
+        try {
+            entradaDataInicio.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+        entradaDataInicio.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                entradaDataInicioFocusLost(evt);
             }
         });
 
-        jButton1.setText("Cadastrar");
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setText("Horário");
 
-        jButton2.setText("Listar");
+        entradaHoraInicio.setBackground(new java.awt.Color(90, 90, 90));
+        entradaHoraInicio.setForeground(new java.awt.Color(255, 255, 255));
+        try {
+            entradaHoraInicio.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##:##")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
 
-        jButton3.setText("Alterar");
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setText("Início");
 
-        jButton4.setText("Remover");
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel4.setText("Término");
 
-        jButton5.setText("<");
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel5.setText("Nome do Compromisso");
 
-        jButton6.setText(">");
+        entradaNomeCompromisso.setBackground(new java.awt.Color(90, 90, 90));
+        entradaNomeCompromisso.setForeground(new java.awt.Color(255, 255, 255));
+        entradaNomeCompromisso.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                entradaNomeCompromissoActionPerformed(evt);
+            }
+        });
 
+        btCadastrar.setBackground(new java.awt.Color(102, 102, 102));
+        btCadastrar.setForeground(new java.awt.Color(255, 255, 255));
+        btCadastrar.setText("Cadastrar");
+        btCadastrar.setBorderPainted(false);
+        btCadastrar.setFocusPainted(false);
+        btCadastrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btCadastrarActionPerformed(evt);
+            }
+        });
+
+        btListar.setBackground(new java.awt.Color(102, 102, 102));
+        btListar.setForeground(new java.awt.Color(255, 255, 255));
+        btListar.setText("Listar");
+        btListar.setBorderPainted(false);
+        btListar.setFocusPainted(false);
+        btListar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btListarActionPerformed(evt);
+            }
+        });
+
+        btAlterar.setBackground(new java.awt.Color(102, 102, 102));
+        btAlterar.setForeground(new java.awt.Color(255, 255, 255));
+        btAlterar.setText("Alterar");
+        btAlterar.setBorderPainted(false);
+        btAlterar.setFocusPainted(false);
+        btAlterar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btAlterarActionPerformed(evt);
+            }
+        });
+
+        btRemover.setBackground(new java.awt.Color(102, 102, 102));
+        btRemover.setForeground(new java.awt.Color(255, 255, 255));
+        btRemover.setText("Remover");
+        btRemover.setBorderPainted(false);
+        btRemover.setFocusPainted(false);
+        btRemover.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btRemoverActionPerformed(evt);
+            }
+        });
+
+        btAnterior.setBackground(new java.awt.Color(102, 102, 102));
+        btAnterior.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        btAnterior.setForeground(new java.awt.Color(255, 255, 255));
+        btAnterior.setIcon(new javax.swing.ImageIcon(getClass().getResource("/left-arrow.png"))); // NOI18N
+        btAnterior.setBorderPainted(false);
+        btAnterior.setFocusPainted(false);
+        btAnterior.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btAnteriorActionPerformed(evt);
+            }
+        });
+
+        btProximo.setBackground(new java.awt.Color(102, 102, 102));
+        btProximo.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        btProximo.setForeground(new java.awt.Color(255, 255, 255));
+        btProximo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/right-arrow.png"))); // NOI18N
+        btProximo.setBorderPainted(false);
+        btProximo.setFocusPainted(false);
+        btProximo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btProximoActionPerformed(evt);
+            }
+        });
+
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("Horário");
+
+        entradaHoraFim.setBackground(new java.awt.Color(90, 90, 90));
+        entradaHoraFim.setForeground(new java.awt.Color(255, 255, 255));
+        try {
+            entradaHoraFim.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##:##")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+
+        btSalvar.setBackground(new java.awt.Color(102, 102, 102));
+        btSalvar.setForeground(new java.awt.Color(255, 255, 255));
+        btSalvar.setText("Salvar");
+        btSalvar.setBorderPainted(false);
+        btSalvar.setFocusPainted(false);
+        btSalvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btSalvarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelInternoTelaLayout = new javax.swing.GroupLayout(panelInternoTela);
         panelInternoTela.setLayout(panelInternoTelaLayout);
@@ -365,43 +498,48 @@ public class Tela extends javax.swing.JFrame {
                 .addComponent(tituloAcao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelInternoTelaLayout.createSequentialGroup()
-                .addContainerGap(59, Short.MAX_VALUE)
+                .addContainerGap(55, Short.MAX_VALUE)
                 .addGroup(panelInternoTelaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelInternoTelaLayout.createSequentialGroup()
-                        .addComponent(jButton1)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton2)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton3)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton4)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton5)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton6))
                     .addGroup(panelInternoTelaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(jLabel5)
                         .addComponent(tituloDescricao)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 468, Short.MAX_VALUE)
                         .addComponent(jLabel1)
-                        .addComponent(jTextField1)
-                        .addGroup(panelInternoTelaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(panelInternoTelaLayout.createSequentialGroup()
-                                .addComponent(jLabel4)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jFormattedTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel6)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jFormattedTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelInternoTelaLayout.createSequentialGroup()
+                        .addComponent(entradaNomeCompromisso)
+                        .addGroup(panelInternoTelaLayout.createSequentialGroup()
+                            .addGroup(panelInternoTelaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jLabel2)
-                                .addGap(21, 21, 21)
-                                .addComponent(jFormattedTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(44, 44, 44)
-                                .addComponent(jLabel3)
+                                .addComponent(jLabel4))
+                            .addGap(18, 18, 18)
+                            .addGroup(panelInternoTelaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(entradaDataInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(entradaDataFim, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGap(44, 44, 44)
+                            .addGroup(panelInternoTelaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(panelInternoTelaLayout.createSequentialGroup()
+                                    .addComponent(jLabel6)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(entradaHoraFim, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(panelInternoTelaLayout.createSequentialGroup()
+                                    .addComponent(jLabel3)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(entradaHoraInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                    .addGroup(panelInternoTelaLayout.createSequentialGroup()
+                        .addComponent(btCadastrar)
+                        .addGap(18, 18, 18)
+                        .addGroup(panelInternoTelaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelInternoTelaLayout.createSequentialGroup()
+                                .addComponent(btAnterior, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jFormattedTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(btProximo, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(panelInternoTelaLayout.createSequentialGroup()
+                                .addComponent(btListar, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btAlterar)
+                                .addGap(18, 18, 18)
+                                .addComponent(btRemover)
+                                .addGap(18, 18, 18)
+                                .addComponent(btSalvar)))))
                 .addGap(53, 53, 53))
         );
         panelInternoTelaLayout.setVerticalGroup(
@@ -412,7 +550,7 @@ public class Tela extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(entradaNomeCompromisso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
                 .addComponent(tituloDescricao)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -421,26 +559,28 @@ public class Tela extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelInternoTelaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jFormattedTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(entradaDataInicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jFormattedTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(entradaHoraInicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(panelInternoTelaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jFormattedTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(entradaDataFim, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4)
-                    .addGroup(panelInternoTelaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jFormattedTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(entradaHoraFim, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(43, 43, 43)
                 .addGroup(panelInternoTelaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3)
-                    .addComponent(jButton4)
-                    .addComponent(jButton5)
-                    .addComponent(jButton6))
-                .addGap(45, 45, 45))
+                    .addComponent(btCadastrar)
+                    .addComponent(btListar)
+                    .addComponent(btAlterar)
+                    .addComponent(btRemover)
+                    .addComponent(btSalvar))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panelInternoTelaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btProximo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btAnterior, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(12, 12, 12))
         );
 
         javax.swing.GroupLayout panelTelaLayout = new javax.swing.GroupLayout(panelTela);
@@ -450,7 +590,7 @@ public class Tela extends javax.swing.JFrame {
             .addGroup(panelTelaLayout.createSequentialGroup()
                 .addGap(110, 110, 110)
                 .addComponent(panelInternoTela, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(110, Short.MAX_VALUE))
+                .addContainerGap(116, Short.MAX_VALUE))
         );
         panelTelaLayout.setVerticalGroup(
             panelTelaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -473,16 +613,18 @@ public class Tela extends javax.swing.JFrame {
     private void btEntrarLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btEntrarLoginActionPerformed
         String nomeUsuario = entradaUsuario.getText();
         char[] senha = pfSenhaLogin.getPassword();
-        if(!nomeUsuario.isEmpty() || senha.length == 0){
-            for(Usuario user : usuarios){
-                boolean validaSenha = Arrays.equals(senha, user.getSenha());
-                boolean validaUsuario = nomeUsuario.equals(user.getNomeUsuario());
-                if(validaSenha && validaUsuario){
-                    cardLayout.show(getContentPane(), "cardTela");
-                }else {
-                    JOptionPane.showMessageDialog(rootPane, "Usuario ou senha incorreto!", "Login Não Sucedido", JOptionPane.ERROR_MESSAGE);
-                }
+        if(!nomeUsuario.isEmpty() || senha.length != 0){
+            boolean validaSenha = Arrays.equals(senha, agenda.getUsuario().getSenha());
+            boolean validaUsuario = nomeUsuario.equals(agenda.getUsuario().getNomeUsuario());
+            if(validaSenha && validaUsuario){
+                cardLayout.show(getContentPane(), "cardTela");
+            }else {
+                JOptionPane.showMessageDialog(rootPane, "Usuario ou senha incorreto!", "Login Não Sucedido", JOptionPane.ERROR_MESSAGE);
             }
+        }else{
+            JOptionPane.showMessageDialog(rootPane, "Usuario ou senha incorreto!", "Login Não Sucedido", JOptionPane.ERROR_MESSAGE);
+            entradaUsuario.setBorder(new LineBorder(Color.red, 2));
+            pfSenhaLogin.setBorder(new LineBorder(Color.red, 2));
         }
     }//GEN-LAST:event_btEntrarLoginActionPerformed
 
@@ -492,7 +634,7 @@ public class Tela extends javax.swing.JFrame {
         char[] confirmaSenha = pfSenhaConfRegistre.getPassword();
         boolean validaSenha = Arrays.equals(senha, confirmaSenha);
         if(validaSenha){
-            usuarios.add(new Usuario(nomeUsuario, senha));
+            agenda = new Agenda((new Usuario(nomeUsuario, senha)));
             JOptionPane.showMessageDialog(rootPane, "Usuário cadastrado com sucesso!", "Cadastro Sucedido", JOptionPane.INFORMATION_MESSAGE);
             cardLayout.show(getContentPane(), "cardLogin");
             limparCampoRegitre();
@@ -516,32 +658,183 @@ public class Tela extends javax.swing.JFrame {
         cardLayout.show(getContentPane(), "cardLogin");
     }//GEN-LAST:event_btCancelarRegistreActionPerformed
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void entradaNomeCompromissoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_entradaNomeCompromissoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_entradaNomeCompromissoActionPerformed
+
+    private void btCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCadastrarActionPerformed
+        boolean nomeValido = true;
+        boolean dataInicioValido = true;
+        boolean dataHorário = true;
+        if(entradaNomeCompromisso.getText().isEmpty()){
+            nomeValido = false;
+            JOptionPane.showMessageDialog(rootPane, "Necessário nome para o compromisso", "Informe um nome", JOptionPane.INFORMATION_MESSAGE);
+        }else
+        if(entradaDataInicio.getText().replaceAll("[^\\d]", "").isEmpty()){
+            dataInicioValido = false;
+            JOptionPane.showMessageDialog(rootPane, "Necessário data de inicio para o compromisso", "Informe uma data inicial", JOptionPane.INFORMATION_MESSAGE);
+        }else
+        if(entradaHoraInicio.getText().replaceAll("[^\\d]", "").isEmpty()){
+            dataHorário = false;
+            JOptionPane.showMessageDialog(rootPane, "Necessário horario de inicio para o compromisso", "Informe um horario inicial", JOptionPane.INFORMATION_MESSAGE);
+        }
+        String descricao = entradaDescCompromisso.getText();
+        if(descricao.isEmpty()){
+            descricao = "";
+        }
+        boolean compromissoRegistrado = false;
+        List<Object> campos;
+        if(nomeValido && dataInicioValido && dataHorário){
+            compromissoRegistrado = agendaController.cadastrarCompromisso(
+                campos = Arrays.asList(
+                entradaNomeCompromisso.getText(),
+                descricao,
+                entradaDataInicio.getText(),
+                entradaHoraInicio.getText(),
+                entradaDataFim.getText(),
+                entradaHoraFim.getText()
+                )
+            );
+        }
+        if(compromissoRegistrado){
+            JOptionPane.showMessageDialog(rootPane, "Compromisso adicionado na agenda", "Compromisso adicionado", JOptionPane.INFORMATION_MESSAGE);
+            limparCamposTela();
+        }
+    }//GEN-LAST:event_btCadastrarActionPerformed
+
+    private void entradaDataInicioFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_entradaDataInicioFocusLost
+        if(!entradaDataInicio.getText().replaceAll("[^\\d]", "").isEmpty()){
+            entradaDataFim.setValue(entradaDataInicio.getText());
+            entradaHoraFim.setValue("23:59");
+        }
+    }//GEN-LAST:event_entradaDataInicioFocusLost
+
+    private void entradaUsuarioKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_entradaUsuarioKeyReleased
+        entradaUsuario.setBorder(UIManager.getBorder("TextField.border"));
+    }//GEN-LAST:event_entradaUsuarioKeyReleased
+
+    private void pfSenhaLoginKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_pfSenhaLoginKeyReleased
+        pfSenhaLogin.setBorder(UIManager.getBorder("TextField.border"));
+    }//GEN-LAST:event_pfSenhaLoginKeyReleased
+
+    private void btListarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btListarActionPerformed
+        emListaDesativaComponentes();
+        if(compromissos!=null && !compromissos.isEmpty()){
+            indiceCompromisso = 0;
+            preencheCompromissoListagem(compromissos.get(indiceCompromisso));
+            controleBotaoLista();
+        }
+    }//GEN-LAST:event_btListarActionPerformed
+
+    private void btAnteriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAnteriorActionPerformed
+        emListaDesativaComponentes();
+        if(compromissos!=null && indiceCompromisso > 0){
+            indiceCompromisso--;
+            preencheCompromissoListagem(compromissos.get(indiceCompromisso));
+            controleBotaoLista();
+        }
+    }//GEN-LAST:event_btAnteriorActionPerformed
+
+    private void btProximoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btProximoActionPerformed
+        emListaDesativaComponentes();
+        if(compromissos!=null && indiceCompromisso < compromissos.size() -1){
+            indiceCompromisso++;
+            preencheCompromissoListagem(compromissos.get(indiceCompromisso));
+            controleBotaoLista();
+        }
+    }//GEN-LAST:event_btProximoActionPerformed
+
+    private void btAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAlterarActionPerformed
+        btListar.setEnabled(false);
+        ativaComponentes();
+    }//GEN-LAST:event_btAlterarActionPerformed
+
+    private void btSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSalvarActionPerformed
+        List<Object> campos = Arrays.asList(
+            entradaNomeCompromisso.getText(),
+            entradaDataInicio.getText(),
+            entradaHoraInicio.getText(),
+            entradaDataFim.getText(),
+            entradaHoraFim.getText());
+        agendaController.alterarCompromisso(indiceCompromisso,campos);
+    }//GEN-LAST:event_btSalvarActionPerformed
+
+    private void btRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btRemoverActionPerformed
+        agendaController.deletarCompromisso(indiceCompromisso);
+    }//GEN-LAST:event_btRemoverActionPerformed
+    
+    public void controleBotaoLista(){
+        btAnterior.setEnabled(indiceCompromisso > 0);
+        btProximo.setEnabled(indiceCompromisso < compromissos.size() - 1);
+    }
+    public void preencheCompromissoListagem(Compromisso compromisso){
+        DateTimeFormatter formatarData = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter formatarHora = DateTimeFormatter.ofPattern("HH:mm");
+        entradaNomeCompromisso.setText(compromisso.getNome());
+        entradaDescCompromisso.setText(compromisso.getDescricao());
+        entradaDataInicio.setText(compromisso.getDataHoraInicio().toLocalDate().format(formatarData));
+        entradaHoraInicio.setText(compromisso.getDataHoraInicio().toLocalTime().format(formatarHora));
+        entradaDataFim.setText(compromisso.getDataHoraFim().toLocalDate().format(formatarData));
+        entradaHoraFim.setText(compromisso.getDataHoraFim().toLocalTime().format(formatarHora));
+    }
+    
     public void limparCampoRegitre(){
         entradaUsuarioRegistre.setText("");
         pfEntradaSenhaRegistre.setText("");
         pfSenhaConfRegistre.setText("");
     }
     
+    public void limparCamposTela(){
+        entradaNomeCompromisso.setText("");
+        entradaDescCompromisso.setText("");
+        entradaDataInicio.setText("");
+        entradaHoraInicio.setText("");
+        entradaDataFim.setText("");
+        entradaHoraFim.setText("");
+    }
+    
+    public void emListaDesativaComponentes(){
+        entradaNomeCompromisso.setEnabled(false);
+        entradaDescCompromisso.setEnabled(false);
+        entradaDataInicio.setEnabled(false);
+        entradaHoraInicio.setEnabled(false);
+        entradaDataFim.setEnabled(false);
+        entradaHoraFim.setEnabled(false);
+        btSalvar.setEnabled(false);
+        btCadastrar.setEnabled(false);
+    }
+    
+    public void ativaComponentes(){
+        entradaNomeCompromisso.setEnabled(true);
+        entradaDescCompromisso.setEnabled(true);
+        entradaDataInicio.setEnabled(true);
+        entradaHoraInicio.setEnabled(true);
+        entradaDataFim.setEnabled(true);
+        entradaHoraFim.setEnabled(true);
+        btSalvar.setEnabled(true);
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btAlterar;
+    private javax.swing.JButton btAnterior;
+    private javax.swing.JButton btCadastrar;
     private javax.swing.JButton btCancelarRegistre;
     private javax.swing.JButton btEntrarLogin;
+    private javax.swing.JButton btListar;
+    private javax.swing.JButton btProximo;
     private javax.swing.JButton btRegistrarLogin;
     private javax.swing.JButton btRegistrarRegistre;
+    private javax.swing.JButton btRemover;
+    private javax.swing.JButton btSalvar;
+    private javax.swing.JFormattedTextField entradaDataFim;
+    private javax.swing.JFormattedTextField entradaDataInicio;
+    private javax.swing.JTextArea entradaDescCompromisso;
+    private javax.swing.JFormattedTextField entradaHoraFim;
+    private javax.swing.JFormattedTextField entradaHoraInicio;
+    private javax.swing.JTextField entradaNomeCompromisso;
     private javax.swing.JTextField entradaUsuario;
     private javax.swing.JTextField entradaUsuarioRegistre;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JFormattedTextField jFormattedTextField1;
-    private javax.swing.JFormattedTextField jFormattedTextField2;
-    private javax.swing.JFormattedTextField jFormattedTextField3;
-    private javax.swing.JFormattedTextField jFormattedTextField4;
+    private javax.swing.Box.Filler filler1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -549,8 +842,6 @@ public class Tela extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JPanel panelInternoLogin;
     private javax.swing.JPanel panelInternoRegistre;
     private javax.swing.JPanel panelInternoTela;

@@ -1,16 +1,13 @@
 package br.edu.iftm.telacomarrylist;
 
-import br.edu.iftm.telacomarrylist.model.Compromisso;
-import br.edu.iftm.telacomarrylist.model.Usuario;
+import br.edu.iftm.telacomarrylist.model.Agenda;
 import br.edu.iftm.telacomarrylist.view.Tela;
-import java.util.ArrayList;
 
 public class TelaComArryList {
+    private static Agenda agenda = new Agenda();
     
     public static void main(String[] args) {
-        ArrayList<Compromisso> compromissos = new ArrayList<>();
-        ArrayList<Usuario> usuarios = new ArrayList<>();
-        Tela tela = new Tela(compromissos, usuarios);
+        Tela tela = new Tela(agenda);
         tela.setVisible(true);
     }
 }
