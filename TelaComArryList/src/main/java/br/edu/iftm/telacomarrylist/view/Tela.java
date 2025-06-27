@@ -79,7 +79,7 @@ public class Tela extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         entradaHoraFim = new javax.swing.JFormattedTextField();
         btSalvar = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        btLimpar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new java.awt.CardLayout());
@@ -485,12 +485,14 @@ public class Tela extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setBackground(new java.awt.Color(102, 102, 102));
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("Limpar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btLimpar.setBackground(new java.awt.Color(102, 102, 102));
+        btLimpar.setForeground(new java.awt.Color(255, 255, 255));
+        btLimpar.setText("Limpar");
+        btLimpar.setBorderPainted(false);
+        btLimpar.setFocusPainted(false);
+        btLimpar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btLimparActionPerformed(evt);
             }
         });
 
@@ -532,7 +534,7 @@ public class Tela extends javax.swing.JFrame {
                     .addGroup(panelInternoTelaLayout.createSequentialGroup()
                         .addGroup(panelInternoTelaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(btCadastrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(btLimpar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
                         .addGroup(panelInternoTelaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(panelInternoTelaLayout.createSequentialGroup()
@@ -587,7 +589,7 @@ public class Tela extends javax.swing.JFrame {
                 .addGroup(panelInternoTelaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btProximo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btAnterior, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
+                    .addComponent(btLimpar))
                 .addGap(12, 12, 12))
         );
 
@@ -782,11 +784,18 @@ public class Tela extends javax.swing.JFrame {
         agendaController.deletarCompromisso(indiceCompromisso);
     }//GEN-LAST:event_btRemoverActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btLimparActionPerformed
         btCadastrar.setEnabled(true);
         limparCamposTela();
         botaoDefault();
-    }//GEN-LAST:event_jButton1ActionPerformed
+        if(!agenda.getCompromissos().isEmpty()){
+            btListar.setEnabled(true);
+            btAnterior.setEnabled(true);
+            btProximo.setEnabled(true);
+        }
+        ativaComponentes();
+        btSalvar.setEnabled(false);
+    }//GEN-LAST:event_btLimparActionPerformed
     
     public void controleBotaoLista(){
         btAnterior.setEnabled(indiceCompromisso > 0);
@@ -869,6 +878,7 @@ public class Tela extends javax.swing.JFrame {
     private javax.swing.JButton btCadastrar;
     private javax.swing.JButton btCancelarRegistre;
     private javax.swing.JButton btEntrarLogin;
+    private javax.swing.JButton btLimpar;
     private javax.swing.JButton btListar;
     private javax.swing.JButton btProximo;
     private javax.swing.JButton btRegistrarLogin;
@@ -884,7 +894,6 @@ public class Tela extends javax.swing.JFrame {
     private javax.swing.JTextField entradaUsuario;
     private javax.swing.JTextField entradaUsuarioRegistre;
     private javax.swing.Box.Filler filler1;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
