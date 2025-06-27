@@ -24,7 +24,7 @@ public class Tela extends javax.swing.JFrame {
     public Tela(Agenda agenda) {
         this.agenda = agenda;
         agendaController = new AgendaController(agenda);
-        compromissos = agendaController.listarCompromissos();
+        compromissos = agenda.getCompromissos();
         initComponents();
         cardLayout = (CardLayout) getContentPane().getLayout();
     }
@@ -79,6 +79,7 @@ public class Tela extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         entradaHoraFim = new javax.swing.JFormattedTextField();
         btSalvar = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new java.awt.CardLayout());
@@ -393,11 +394,6 @@ public class Tela extends javax.swing.JFrame {
 
         entradaNomeCompromisso.setBackground(new java.awt.Color(90, 90, 90));
         entradaNomeCompromisso.setForeground(new java.awt.Color(255, 255, 255));
-        entradaNomeCompromisso.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                entradaNomeCompromissoActionPerformed(evt);
-            }
-        });
 
         btCadastrar.setBackground(new java.awt.Color(102, 102, 102));
         btCadastrar.setForeground(new java.awt.Color(255, 255, 255));
@@ -489,6 +485,15 @@ public class Tela extends javax.swing.JFrame {
             }
         });
 
+        jButton1.setBackground(new java.awt.Color(102, 102, 102));
+        jButton1.setForeground(new java.awt.Color(255, 255, 255));
+        jButton1.setText("Limpar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelInternoTelaLayout = new javax.swing.GroupLayout(panelInternoTela);
         panelInternoTela.setLayout(panelInternoTelaLayout);
         panelInternoTelaLayout.setHorizontalGroup(
@@ -525,7 +530,9 @@ public class Tela extends javax.swing.JFrame {
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addComponent(entradaHoraInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addGroup(panelInternoTelaLayout.createSequentialGroup()
-                        .addComponent(btCadastrar)
+                        .addGroup(panelInternoTelaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btCadastrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
                         .addGroup(panelInternoTelaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(panelInternoTelaLayout.createSequentialGroup()
@@ -579,7 +586,8 @@ public class Tela extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelInternoTelaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btProximo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btAnterior, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btAnterior, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1))
                 .addGap(12, 12, 12))
         );
 
@@ -609,17 +617,22 @@ public class Tela extends javax.swing.JFrame {
     private void btRegistrarLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btRegistrarLoginActionPerformed
         cardLayout.show(getContentPane(), "cardRegistrar");
     }//GEN-LAST:event_btRegistrarLoginActionPerformed
-
+//agenda.getUsuario().getNomeUsuario() != null &&
     private void btEntrarLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btEntrarLoginActionPerformed
         String nomeUsuario = entradaUsuario.getText();
         char[] senha = pfSenhaLogin.getPassword();
         if(!nomeUsuario.isEmpty() || senha.length != 0){
-            boolean validaSenha = Arrays.equals(senha, agenda.getUsuario().getSenha());
-            boolean validaUsuario = nomeUsuario.equals(agenda.getUsuario().getNomeUsuario());
-            if(validaSenha && validaUsuario){
-                cardLayout.show(getContentPane(), "cardTela");
-            }else {
-                JOptionPane.showMessageDialog(rootPane, "Usuario ou senha incorreto!", "Login Não Sucedido", JOptionPane.ERROR_MESSAGE);
+            if(agenda.getUsuario() != null){
+                boolean validaSenha = Arrays.equals(senha, agenda.getUsuario().getSenha());
+                boolean validaUsuario = nomeUsuario.equals(agenda.getUsuario().getNomeUsuario());
+                if(validaSenha && validaUsuario){
+                    cardLayout.show(getContentPane(), "cardTela");
+                    botaoDefault();
+                }else {
+                    JOptionPane.showMessageDialog(rootPane, "Usuario ou senha incorreto!", "Login Não Sucedido", JOptionPane.ERROR_MESSAGE);
+                }
+            }else{
+                JOptionPane.showMessageDialog(rootPane, "Usuario não cadastrado!", "Login Não Sucedido", JOptionPane.ERROR_MESSAGE);
             }
         }else{
             JOptionPane.showMessageDialog(rootPane, "Usuario ou senha incorreto!", "Login Não Sucedido", JOptionPane.ERROR_MESSAGE);
@@ -658,11 +671,8 @@ public class Tela extends javax.swing.JFrame {
         cardLayout.show(getContentPane(), "cardLogin");
     }//GEN-LAST:event_btCancelarRegistreActionPerformed
 
-    private void entradaNomeCompromissoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_entradaNomeCompromissoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_entradaNomeCompromissoActionPerformed
-
     private void btCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCadastrarActionPerformed
+        taLogado();
         boolean nomeValido = true;
         boolean dataInicioValido = true;
         boolean dataHorário = true;
@@ -699,6 +709,7 @@ public class Tela extends javax.swing.JFrame {
         if(compromissoRegistrado){
             JOptionPane.showMessageDialog(rootPane, "Compromisso adicionado na agenda", "Compromisso adicionado", JOptionPane.INFORMATION_MESSAGE);
             limparCamposTela();
+            btListar.setEnabled(true);
         }
     }//GEN-LAST:event_btCadastrarActionPerformed
 
@@ -718,7 +729,9 @@ public class Tela extends javax.swing.JFrame {
     }//GEN-LAST:event_pfSenhaLoginKeyReleased
 
     private void btListarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btListarActionPerformed
+        taLogado();
         emListaDesativaComponentes();
+        habilitaBotoes();
         if(compromissos!=null && !compromissos.isEmpty()){
             indiceCompromisso = 0;
             preencheCompromissoListagem(compromissos.get(indiceCompromisso));
@@ -745,6 +758,7 @@ public class Tela extends javax.swing.JFrame {
     }//GEN-LAST:event_btProximoActionPerformed
 
     private void btAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAlterarActionPerformed
+        taLogado();
         btListar.setEnabled(false);
         ativaComponentes();
     }//GEN-LAST:event_btAlterarActionPerformed
@@ -752,16 +766,27 @@ public class Tela extends javax.swing.JFrame {
     private void btSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSalvarActionPerformed
         List<Object> campos = Arrays.asList(
             entradaNomeCompromisso.getText(),
+            entradaDescCompromisso.getText(),
             entradaDataInicio.getText(),
             entradaHoraInicio.getText(),
             entradaDataFim.getText(),
             entradaHoraFim.getText());
-        agendaController.alterarCompromisso(indiceCompromisso,campos);
+        agendaController.alterarCompromisso(indiceCompromisso, campos);
+        btListar.setEnabled(true);
+        btAnterior.setEnabled(true);
+        btProximo.setEnabled(true);
     }//GEN-LAST:event_btSalvarActionPerformed
 
     private void btRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btRemoverActionPerformed
+        taLogado();
         agendaController.deletarCompromisso(indiceCompromisso);
     }//GEN-LAST:event_btRemoverActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        btCadastrar.setEnabled(true);
+        limparCamposTela();
+        botaoDefault();
+    }//GEN-LAST:event_jButton1ActionPerformed
     
     public void controleBotaoLista(){
         btAnterior.setEnabled(indiceCompromisso > 0);
@@ -793,6 +818,22 @@ public class Tela extends javax.swing.JFrame {
         entradaHoraFim.setText("");
     }
     
+    public void botaoDefault(){
+        btSalvar.setEnabled(false);
+        btRemover.setEnabled(false);
+        btAlterar.setEnabled(false);
+        btListar.setEnabled(false);
+        btAnterior.setEnabled(false);
+        btProximo.setEnabled(false);
+    }
+    
+    public void habilitaBotoes(){
+        btRemover.setEnabled(true);
+        btAlterar.setEnabled(true);
+        btAnterior.setEnabled(true);
+        btProximo.setEnabled(true);
+    }
+    
     public void emListaDesativaComponentes(){
         entradaNomeCompromisso.setEnabled(false);
         entradaDescCompromisso.setEnabled(false);
@@ -812,6 +853,14 @@ public class Tela extends javax.swing.JFrame {
         entradaDataFim.setEnabled(true);
         entradaHoraFim.setEnabled(true);
         btSalvar.setEnabled(true);
+    }
+    
+    public void taLogado(){
+        if(agenda.getUsuario().getNomeUsuario().isEmpty()||agenda.getUsuario().getNomeUsuario()==null){
+            JOptionPane.showMessageDialog(rootPane, "Usuário não logado", "Login Necessário", JOptionPane.INFORMATION_MESSAGE);
+            cardLayout.show(getContentPane(), "cardLogin");
+            limparCamposTela();
+        }
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -835,6 +884,7 @@ public class Tela extends javax.swing.JFrame {
     private javax.swing.JTextField entradaUsuario;
     private javax.swing.JTextField entradaUsuarioRegistre;
     private javax.swing.Box.Filler filler1;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
