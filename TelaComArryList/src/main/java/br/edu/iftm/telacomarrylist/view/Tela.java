@@ -618,6 +618,11 @@ public class Tela extends javax.swing.JFrame {
 
     private void btRegistrarLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btRegistrarLoginActionPerformed
         cardLayout.show(getContentPane(), "cardRegistrar");
+        entradaUsuario.setText("");
+        pfSenhaLogin.setText("");
+        entradaUsuario.setBorder(UIManager.getBorder("TextField.border"));
+        pfSenhaLogin.setBorder(UIManager.getBorder("TextField.border"));
+        
     }//GEN-LAST:event_btRegistrarLoginActionPerformed
 //agenda.getUsuario().getNomeUsuario() != null &&
     private void btEntrarLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btEntrarLoginActionPerformed
@@ -782,8 +787,10 @@ public class Tela extends javax.swing.JFrame {
     private void btRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btRemoverActionPerformed
         taLogado();
         agendaController.deletarCompromisso(indiceCompromisso);
+        limparCamposTela();
         if(compromissos == null || compromissos.isEmpty()){
             botaoDefault();
+            btCadastrar.setEnabled(true);
         }
     }//GEN-LAST:event_btRemoverActionPerformed
 
@@ -793,8 +800,6 @@ public class Tela extends javax.swing.JFrame {
         botaoDefault();
         if(compromissos != null && !compromissos.isEmpty()){
             btListar.setEnabled(true);
-            btAnterior.setEnabled(true);
-            btProximo.setEnabled(true);
         }
         ativaComponentes();
         btSalvar.setEnabled(false);
