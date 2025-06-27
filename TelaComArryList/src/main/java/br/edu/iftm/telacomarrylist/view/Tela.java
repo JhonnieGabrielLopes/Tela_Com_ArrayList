@@ -782,13 +782,16 @@ public class Tela extends javax.swing.JFrame {
     private void btRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btRemoverActionPerformed
         taLogado();
         agendaController.deletarCompromisso(indiceCompromisso);
+        if(compromissos == null || compromissos.isEmpty()){
+            botaoDefault();
+        }
     }//GEN-LAST:event_btRemoverActionPerformed
 
     private void btLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btLimparActionPerformed
         btCadastrar.setEnabled(true);
         limparCamposTela();
         botaoDefault();
-        if(!agenda.getCompromissos().isEmpty()){
+        if(compromissos != null && !compromissos.isEmpty()){
             btListar.setEnabled(true);
             btAnterior.setEnabled(true);
             btProximo.setEnabled(true);
